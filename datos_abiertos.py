@@ -40,18 +40,10 @@ def extract_zip_file(__file_name):
     return zipObj.namelist()[0]
 
 
-def filter_data_by_estado(__estado, __database):
-    __filter = __database['ENTIDAD_RES'] == int(__estado)
+def filter_data_by_estado(__campo,__valor, __database):
+    __filter = __database[__campo] == int(__estado)
     __filtered = __database[__filter]
-    __name_file = 'out_' + str(__estado) + '.csv'
-    __filtered.to_csv(__name_file, encoding='UTF-8')
-    return __name_file
-
-
-def filtered_data_by_municipio(__municipio, __database):
-    __filter = __database['MUNICIPIO_RES'] == int(__municipio)
-    __filtered = __database[__filter]
-    __name_file = 'out_' + str(__municipio) + '.csv'
+    __name_file = 'out_' + str(__valor) + '.csv'
     __filtered.to_csv(__name_file, encoding='UTF-8')
     return __name_file
 
@@ -67,7 +59,13 @@ def main_program():
             return main_program()
 
         database = read_csv(data_file, encoding="latin1")
+        print("casos Mexico " + str(len(database.axes[0])))
+        
         filter_data_by_estado("07", database)
-        # filtered_data_by_municipio("101", database)
-
+        chiapas = read_csv("out_07.csv", encoding="UTF-8")
+        print("casos Chiapas " + str(len(chiapas.axes[0])))
+        filtered_data_by_municipio("101", chiapas)
+        tuxtla = read_csv("out_101.csv", encoding="UTF-8")
+        print("casos Tuxtla " + str(len(tuxtla.axes[0])))
 main_program()
+
